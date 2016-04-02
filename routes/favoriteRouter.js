@@ -23,7 +23,8 @@ function addToFavorites(favorites, newFavorite, res) {
 }
 
 favoriteRouter.route('/')
-.get(Verify.verifyOrdinaryUser, function (req, res, next) {
+.all(Verify.verifyOrdinaryUser)
+.get(function (req, res, next) {
     Favorites.findOne({postedBy: req.decoded._doc._id})
     .populate('postedBy')
     .populate('dishes')
@@ -33,7 +34,7 @@ favoriteRouter.route('/')
     });
 })
 
-.post(Verify.verifyOrdinaryUser, function (req, res, next) {
+.post(function (req, res, next) {
     Favorites.findOne({postedBy: req.decoded._doc._id}, function(err, favorites) {
         // console.log(favorites);
         if (!favorites) {
@@ -47,7 +48,7 @@ favoriteRouter.route('/')
     });
 })
 
-.delete(Verify.verifyOrdinaryUser, function (req, res, next) {
+.delete(function (req, res, next) {
     Favorites.findOne({postedBy: req.decoded._doc._id}, function(err, favorites) {
         if (!favorites) {
             res.end('You do not have any favorites!');
